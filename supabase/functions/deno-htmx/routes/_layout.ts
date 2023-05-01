@@ -1,4 +1,4 @@
-import SupabaseAuth from "../components/SupabaseAuth.ts";
+import SupabaseAuth from "/components/SupabaseAuth.ts";
 import { html, LayoutFunction } from "/html.ts";
 
 // this is the layout for the entire site

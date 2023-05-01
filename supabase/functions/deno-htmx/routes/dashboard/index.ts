@@ -1,5 +1,5 @@
-import Stat from "../../components/Stat.ts";
-import Table from "../../components/Table.ts";
+import Stat from "/components/Stat.ts";
+import Table from "/components/Table.ts";
 
 import { html, htmlResponse, EndpointFunction } from "../../html.ts";
 
