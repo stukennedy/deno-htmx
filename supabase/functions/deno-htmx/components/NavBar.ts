@@ -1,4 +1,4 @@
-import { html } from "../html.ts";
+import { html } from "lib/html.ts";
 
 /*
  * In this Navbar component, we want to add the "active" class to the

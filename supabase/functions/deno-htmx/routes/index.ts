@@ -1,41 +1,40 @@
-import Toast from "/components/Toast.ts";
-// import { getSupabase } from "../model/supabase";
+import Toast from "components/Toast.ts";
+import { getSupabase } from "model/supabase.ts";
+import { html, htmlResponse, EndpointFunction } from "lib/html.ts";
 
-import { html, htmlResponse, EndpointFunction } from "/html.ts";
+export const onRequestPost: EndpointFunction = async ({ request }) => {
+  const data = await request.formData();
+  const email = data.get("email") as string;
+  if (!email) {
+    return htmlResponse(Toast("Email not specified", "alert-error"));
+  }
+  const supabase = await getSupabase();
+  const url = new URL(request.url);
+  const { error } = await supabase.auth.signInWithOtp({
+    email,
+    options: {
+      emailRedirectTo: `${url.origin}/logging-in`,
+    },
+  });
 
-export const onRequestPost: EndpointFunction = () => {
-  // const data = await request.formData();
-  // const email = data.get("email") as string;
-  // if (!email) {
-  //   return htmlResponse(Toast("Email not specified", "alert-error"));
-  // }
-  // const supabase = await getSupabase();
-  // const url = new URL(request.url);
-  // const { error } = await supabase.auth.signInWithOtp({
-  //   email,
-  //   options: {
-  //     emailRedirectTo: `${url.origin}/logging-in`,
-  //   },
-  // });
-
-  // if (error) {
-  //   return htmlResponse(Toast(error.message, "alert-error"));
-  // }
+  if (error) {
+    return htmlResponse(Toast(error.message, "alert-error"));
+  }
   return htmlResponse(
     Toast("Please check your email for a magic link to log into the website")
   );
 };
 
-export const onRequestGet: EndpointFunction = () => {
-  // const supabase = await getSupabase(request);
-  // const {
-  //   data: { user },
-  // } = await supabase.auth.getUser();
-  // if (user) {
-  //   console.log("redirect to dashboard");
-  //   const url = new URL(request.url);
-  //   return Response.redirect(url.origin + "/dashboard", 303);
-  // }
+export const onRequestGet: EndpointFunction = async ({ request, redirect }) => {
+  const supabase = await getSupabase(request);
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  if (user) {
+    console.log("redirect to dashboard");
+    const url = new URL(request.url);
+    redirect(url.origin + "/dashboard", 303);
+  }
   return htmlResponse(html`
     <div class="w-full h-screen p-10 text-center">
       <div class="flex justify-center pt-24 lg:pt-64">

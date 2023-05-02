@@ -1,5 +1,5 @@
-import Toast from "/components/Toast.ts";
-import { htmlResponse, EndpointFunction } from "/html.ts";
+import Toast from "components/Toast.ts";
+import { htmlResponse, EndpointFunction } from "lib/html.ts";
 
 export const onRequestPost: EndpointFunction = () => {
   const response = htmlResponse(Toast("Successfully logged out"));

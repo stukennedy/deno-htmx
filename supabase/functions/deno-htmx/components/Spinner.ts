@@ -1,4 +1,4 @@
-import { html } from "../html.ts";
+import { html } from "lib/html.ts";
 
 export default (message: string) => html`
   <div class="w-full h-full">

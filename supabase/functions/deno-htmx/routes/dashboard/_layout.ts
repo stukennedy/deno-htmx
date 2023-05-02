@@ -1,7 +1,7 @@
-import { getSupabase } from "/model/supabase.ts";
-import { LayoutFunction, html } from "/html.ts";
+import { getSupabase } from "model/supabase.ts";
+import { LayoutFunction, html } from "lib/html.ts";
 
-import NavBar from "/components/NavBar.ts";
+import NavBar from "components/NavBar.ts";
 
 const _layout: LayoutFunction = async ({ children, request, redirect }) => {
   console.log("authentication: _layout");

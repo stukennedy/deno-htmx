@@ -1,5 +1,5 @@
-import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
-import { parse } from "https://esm.sh/cookie";
+import { createClient } from "supabase-js";
+import { parse } from "cookie";
 
 const PUBLIC_SUPABASE_URL = "https://pfvlbdutrfswxykbtrhs.supabase.co";
 const PUBLIC_SUPABASE_ANON_KEY =

@@ -1,4 +1,4 @@
-import { html } from "../html.ts";
+import { html } from "lib/html.ts";
 
 export default (message: string, alertClass = "alert-success") => {
   return html`

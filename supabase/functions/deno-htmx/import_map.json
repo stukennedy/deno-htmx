@@ -1,7 +1,10 @@
 {
    "imports": {
-       "/": "./",
-       "./": "./",
-      "http/": "https://deno.land/std@0.168.0/http/"
+      "lib/": "./lib/",
+      "model/": "./model/",
+      "components/": "./components/",
+      "supabase-js": "https://esm.sh/@supabase/supabase-js@2.21.0",
+      "http/": "https://deno.land/std@0.168.0/http/",
+      "cookie": "https://esm.sh/cookie@0.5.0"
    }
 }

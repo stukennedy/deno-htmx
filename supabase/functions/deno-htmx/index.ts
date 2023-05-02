@@ -1,6 +1,6 @@
 import { serve } from "http/server.ts";
-import { html, htmlResponse } from "/html.ts";
-import { getEndpoint } from "/utils.ts";
+import { html, htmlResponse } from "lib/html.ts";
+import { getEndpoint } from "./utils.ts";
 const port = 8080;
 
 const sendFile = async (filepath: string) => {
@@ -25,9 +25,8 @@ const handler = async (request: Request): Promise<Response> => {
   }
 
   const path = "./routes" + filepath;
-  const fileName = path.endsWith("/") ? `${path}index.ts` : `${path}.ts`;
   try {
-    return await getEndpoint(fileName, request);
+    return await getEndpoint(path, request);
   } catch (error) {
     console.log({ error });
   }

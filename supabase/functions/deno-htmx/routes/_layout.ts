@@ -1,5 +1,5 @@
-import SupabaseAuth from "/components/SupabaseAuth.ts";
-import { html, LayoutFunction } from "/html.ts";
+import SupabaseAuth from "components/SupabaseAuth.ts";
+import { html, LayoutFunction } from "lib/html.ts";
 
 // this is the layout for the entire site
 const _layout: LayoutFunction = ({ children }) => {

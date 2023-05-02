@@ -4,7 +4,7 @@ import {
   htmlResponse,
   Endpoint,
   LayoutFunction,
-} from "./html.ts";
+} from "lib/html.ts";
 
 class RedirectError extends Error {
   url: string;
@@ -70,10 +70,11 @@ const getMethod = (
 };
 
 export const getEndpoint = async (
-  fileName: string,
+  path: string,
   request: Request
 ): Promise<Response> => {
   let module;
+  let fileName = path.endsWith("/") ? `${path}index.ts` : `${path}.ts`;
   try {
     module = await import(fileName);
   } catch {

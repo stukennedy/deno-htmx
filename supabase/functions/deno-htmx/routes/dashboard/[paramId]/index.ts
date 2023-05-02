@@ -1,4 +1,4 @@
-import { html, htmlResponse, EndpointFunction } from "/html.ts";
+import { html, htmlResponse, EndpointFunction } from "lib/html.ts";
 
 export const onRequestPost: EndpointFunction = ({ request }) => {
   const url = new URL(request.url);

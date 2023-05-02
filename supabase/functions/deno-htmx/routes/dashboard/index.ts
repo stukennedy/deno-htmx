@@ -1,7 +1,7 @@
-import Stat from "/components/Stat.ts";
-import Table from "/components/Table.ts";
+import Stat from "components/Stat.ts";
+import Table from "components/Table.ts";
 
-import { html, htmlResponse, EndpointFunction } from "../../html.ts";
+import { html, htmlResponse, EndpointFunction } from "lib/html.ts";
 
 const timer = (ms: number) => new Promise((res) => setTimeout(res, ms));
 
