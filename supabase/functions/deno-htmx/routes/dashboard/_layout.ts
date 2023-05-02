@@ -1,5 +1,6 @@
 import { getSupabase } from "model/supabase.ts";
-import { LayoutFunction, html } from "lib/html.ts";
+import { html } from "lib/html.ts";
+import { LayoutFunction } from "lib/interfaces.ts";
 
 import NavBar from "components/NavBar.ts";
 

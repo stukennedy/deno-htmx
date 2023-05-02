@@ -2,6 +2,7 @@
   "importMap": "./import_map.json",
   "tasks": {
     // I included these permissions (which are required by chalk) in advance to avoid needing to grant them one-by-one at runtime:
-    "dev": "deno run --watch --allow-net --allow-read index.ts"
+    "dev": "deno run --watch --allow-net --allow-read index.ts",
+    "gen-routes": "deno run --allow-write --allow-read lib/routesGenerator.ts"
   }
 }

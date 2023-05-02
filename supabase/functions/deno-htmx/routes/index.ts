@@ -1,6 +1,7 @@
 import Toast from "components/Toast.ts";
 import { getSupabase } from "model/supabase.ts";
-import { html, htmlResponse, EndpointFunction } from "lib/html.ts";
+import { html, htmlResponse } from "lib/html.ts";
+import { EndpointFunction } from "lib/interfaces.ts";
 
 export const onRequestPost: EndpointFunction = async ({ request }) => {
   const data = await request.formData();

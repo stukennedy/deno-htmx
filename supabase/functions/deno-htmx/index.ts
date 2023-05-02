@@ -20,18 +20,21 @@ const handler = async (request: Request): Promise<Response> => {
   const contentType = request.headers.get("sec-fetch-dest");
 
   console.log("request.url", request.url, request.method, contentType);
-  if (request.method === "GET" && contentType !== "document") {
+  if (
+    request.method === "GET" &&
+    contentType !== "document" &&
+    contentType !== "empty"
+  ) {
     return sendFile(filepath);
   }
 
-  const path = "./routes" + filepath;
   try {
-    return await getEndpoint(path, request);
+    return await getEndpoint(filepath, request);
   } catch (error) {
     console.log({ error });
   }
   return htmlResponse(html` <h1>404 - Not Found</h1>`);
 };
 
-console.log(`HTTP webserver running. Access it at: http://localhost:8080/`);
+console.log(`HTTP webserver running. Access it at: http://localhost:${port}/`);
 await serve(handler, { port });

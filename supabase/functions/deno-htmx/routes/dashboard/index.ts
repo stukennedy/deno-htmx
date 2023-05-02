@@ -1,7 +1,8 @@
+import { html, htmlResponse } from "lib/html.ts";
+import { EndpointFunction } from "lib/interfaces.ts";
+
 import Stat from "components/Stat.ts";
 import Table from "components/Table.ts";
-
-import { html, htmlResponse, EndpointFunction } from "lib/html.ts";
 
 const timer = (ms: number) => new Promise((res) => setTimeout(res, ms));
 

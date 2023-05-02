@@ -1,10 +1,11 @@
+import { html, htmlResponse } from "lib/html.ts";
 import {
   EndpointFunction,
-  html,
-  htmlResponse,
   Endpoint,
   LayoutFunction,
-} from "lib/html.ts";
+  Route,
+} from "lib/interfaces.ts";
+import routes from "lib/routes.json" assert { type: "json" };
 
 class RedirectError extends Error {
   url: string;
@@ -15,6 +16,13 @@ class RedirectError extends Error {
     this.status = status;
   }
 }
+
+const testPath = (route: string, actualPath: string) => {
+  const variablePattern = /\/\[([^\]]+)\]/g;
+  const pathWithRegex = route.replace(variablePattern, "/([^/]+)");
+  const regex = new RegExp("^" + pathWithRegex + "$");
+  return actualPath.replace(/\/$/, "").match(regex);
+};
 
 const redirectFunction = (url: string, status: number) => {
   throw new RedirectError({ url, status });
@@ -73,34 +81,29 @@ export const getEndpoint = async (
   path: string,
   request: Request
 ): Promise<Response> => {
-  let module;
-  let fileName = path.endsWith("/") ? `${path}index.ts` : `${path}.ts`;
+  const route = routes.find((route: Route) => testPath(route.route, path));
+  // console.log({ route, path });
+  let newRequest;
   try {
-    module = await import(fileName);
-  } catch {
-    fileName = fileName.replace(".ts", "/index.ts");
-    module = await import(fileName);
-  }
-  console.log({ fileName });
-  const moduleMethod = getMethod(request.method, module);
-  if (!moduleMethod) {
-    return htmlResponse(html` <h1>404 - Not Found</h1>`);
-  }
-  const newRequest = await moduleMethod({
-    request,
-    params: {},
-    redirect: redirectFunction,
-  });
-  if (request.method === "GET") {
-    const text = await newRequest.text();
-    try {
+    const fileName = route?.filePath!;
+    const module = await import(fileName);
+    const moduleMethod = getMethod(request.method, module);
+    newRequest = await moduleMethod!({
+      request,
+      params: {},
+      redirect: redirectFunction,
+    });
+    if (request.method === "GET") {
+      const text = await newRequest.text();
       const body = await processLayouts(text, fileName, request);
       return htmlResponse(body);
-    } catch (e) {
-      if (e instanceof RedirectError) {
-        return Response.redirect(e.url, e.status);
-      }
     }
+  } catch (e) {
+    if (e instanceof RedirectError) {
+      return Response.redirect(e.url, e.status);
+    }
+    console.error(e);
+    return htmlResponse(html` <h1>404 - Not Found</h1>`);
   }
   return newRequest;
 };
