@@ -15,14 +15,7 @@ export interface EndpointFunction {
   }): Response | Promise<Response>;
 }
 
-export interface Endpoint {
-  onRequestGet?: EndpointFunction;
-  onRequestPost?: EndpointFunction;
-  onRequestPut?: EndpointFunction;
-  onRequestDelete?: EndpointFunction;
-  onRequestPatch?: EndpointFunction;
-}
-
+export type Endpoint  = Record<string, EndpointFunction | null>
 export type Route = {
   route: string;
   filePath: string;

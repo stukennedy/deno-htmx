@@ -1,34 +1,34 @@
 [
     {
         "route": "/logout",
-        "filePath": "./routes/logout.ts"
+        "filePath": "/routes/logout.ts"
     },
     {
         "route": "/logging-in",
-        "filePath": "./routes/logging-in.ts"
+        "filePath": "/routes/logging-in.ts"
     },
     {
         "route": "",
-        "filePath": "./routes/index.ts"
+        "filePath": "/routes/index.ts"
     },
     {
         "route": "/dashboard",
-        "filePath": "./routes/dashboard/index.ts"
+        "filePath": "/routes/dashboard/index.ts"
     },
     {
         "route": "/dashboard/[paramId]",
-        "filePath": "./routes/dashboard/[paramId]/index.ts"
+        "filePath": "/routes/dashboard/[paramId]/index.ts"
     },
     {
         "route": "/dashboard/[paramId]/view",
-        "filePath": "./routes/dashboard/[paramId]/view.ts"
+        "filePath": "/routes/dashboard/[paramId]/view.ts"
     },
     {
         "route": "/dashboard/_layout",
-        "filePath": "./routes/dashboard/_layout.ts"
+        "filePath": "/routes/dashboard/_layout.ts"
     },
     {
         "route": "/_layout",
-        "filePath": "./routes/_layout.ts"
+        "filePath": "/routes/_layout.ts"
     }
 ]

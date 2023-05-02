@@ -5,7 +5,6 @@ import { LayoutFunction } from "lib/interfaces.ts";
 import NavBar from "components/NavBar.ts";
 
 const _layout: LayoutFunction = async ({ children, request, redirect }) => {
-  console.log("authentication: _layout");
   const url = new URL(request.url);
   const supabase = await getSupabase(request);
   const {

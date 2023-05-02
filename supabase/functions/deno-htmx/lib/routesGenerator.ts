@@ -19,7 +19,7 @@ async function loadRoutes(dir: string): Promise<void> {
         .replace(/index$/, "")
         .replace(/\/$/, "");
 
-      const flpath = filePath.replace(path.join(Deno.cwd()), ".");
+      const flpath = filePath.replace(path.join(Deno.cwd()), "");
       routes.push({ route, filePath: flpath });
     }
   }
