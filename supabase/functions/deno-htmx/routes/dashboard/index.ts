@@ -4,11 +4,7 @@ import { EndpointFunction } from "lib/interfaces.ts";
 import Stat from "components/Stat.ts";
 import Table from "components/Table.ts";
 
-const timer = (ms: number) => new Promise((res) => setTimeout(res, ms));
-
-// return the Table component with the items after 1 second
-export const onRequestPost: EndpointFunction = async () => {
-  await timer(1000);
+export const onRequestPost: EndpointFunction = () => {
   const items = [
     {
       name: "Hart Hagerty",

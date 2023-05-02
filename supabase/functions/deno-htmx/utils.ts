@@ -24,20 +24,36 @@ const testPath = (route: string, actualPath: string) => {
   return actualPath.replace(/\/$/, "").match(regex);
 };
 
+const getParams = (route: string, actualPath: string) => {
+  const params: { [key: string]: string } = {};
+  const variablePattern = /\/\[([^\]]+)\]/g;
+  const variableNames = route.match(variablePattern)?.map((v) => v.slice(2, -1));
+  const match = testPath(route, actualPath);
+  if (match && variableNames) {
+    variableNames.forEach((name, i) => {
+      params[name] = match[i + 1];
+    });
+  }
+  return { params };
+}
+
 const redirectFunction = (url: string, status: number) => {
   throw new RedirectError({ url, status });
 };
 
 export const processLayouts = async (
   body: string,
-  fileName: string,
+  route: Route,
   request: Request
 ) => {
   let newBody = body;
-  let rootPath = fileName;
+  let rootPath = route.filePath;
+  const layouts = routes.filter(route => route.route.endsWith('_layout'))
+  const path = route.route.replace(/\/[^/]+$/, "/_layout");
+  console.log({path, layouts})
   while (true) {
     const filePath = rootPath.replace(/\/[^/]+$/, "/_layout.ts");
-    // console.log({ rootPath, filePath });
+    console.log({ rootPath, filePath });
     try {
       const module = await import(filePath);
       newBody = await (<LayoutFunction>module.default)({
@@ -88,14 +104,18 @@ export const getEndpoint = async (
     const fileName = route?.filePath!;
     const module = await import(fileName);
     const moduleMethod = getMethod(request.method, module);
+    const params = getParams(route!.route, path).params;
     newRequest = await moduleMethod!({
       request,
-      params: {},
+      params,
       redirect: redirectFunction,
     });
     if (request.method === "GET") {
       const text = await newRequest.text();
-      const body = await processLayouts(text, fileName, request);
+      const startTime = Date.now();
+      const body = await processLayouts(text, route!, request);
+      const timeElapsed = Date.now() - startTime;
+      console.log("getModules", { timeElapsed });
       return htmlResponse(body);
     }
   } catch (e) {
