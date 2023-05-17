@@ -1,19 +1,21 @@
-import { html, htmlResponse, RedirectError } from "lib/html.ts";
-import { Endpoint, LayoutFunction, Route } from "lib/interfaces.ts";
-import routes from "lib/routes.json" assert { type: "json" };
-import { join } from "path";
+import { html, htmlResponse, RedirectError } from 'lib/html.ts';
+import { Endpoint, LayoutFunction, Route } from 'lib/interfaces.ts';
+import routes from 'lib/routes.json' assert { type: 'json' };
+import { join } from 'path';
 
 const testPath = (route: string, actualPath: string) => {
   const variablePattern = /\/\[([^\]]+)\]/g;
-  const pathWithRegex = route.replace(variablePattern, "/([^/]+)");
-  const regex = new RegExp("^" + pathWithRegex + "$");
-  return actualPath.replace(/\/$/, "").match(regex);
+  const pathWithRegex = route.replace(variablePattern, '/([^/]+)');
+  const regex = new RegExp('^' + pathWithRegex + '$');
+  return actualPath.replace(/\/$/, '').match(regex);
 };
 
 const getParams = (route: string, actualPath: string) => {
   const params: { [key: string]: string } = {};
   const variablePattern = /\/\[([^\]]+)\]/g;
-  const variableNames = route.match(variablePattern)?.map((v) => v.slice(2, -1));
+  const variableNames = route
+    .match(variablePattern)
+    ?.map((v) => v.slice(2, -1));
   const match = testPath(route, actualPath);
   if (match && variableNames) {
     variableNames.forEach((name, i) => {
@@ -21,21 +23,17 @@ const getParams = (route: string, actualPath: string) => {
     });
   }
   return { params };
-}
+};
 
 const redirectFunction = (url: string, status: number) => {
   throw new RedirectError({ url, status });
 };
 
-const processLayouts = async (
-  body: string,
-  route: Route,
-  request: Request
-) => {
+const processLayouts = async (body: string, route: Route, request: Request) => {
   let newBody = body;
   let rootPath = route.filePath;
   while (true) {
-    const filePath = rootPath.replace(/\/[^/]+$/, "/_layout.ts");
+    const filePath = rootPath.replace(/\/[^/]+$/, '/_layout.ts');
     try {
       const module = await import(join(Deno.cwd(), filePath));
       newBody = await (<LayoutFunction>module.default)({
@@ -49,10 +47,10 @@ const processLayouts = async (
         redirectFunction(e.url, e.status);
       }
     }
-    if (filePath === "/routes/_layout.ts") {
+    if (filePath === '/routes/_layout.ts') {
       break;
     }
-    rootPath = rootPath.replace(/\/[^/]+$/, "");
+    rootPath = rootPath.replace(/\/[^/]+$/, '');
   }
   return newBody;
 };
@@ -71,14 +69,14 @@ export const getEndpoint = async (
       PUT: module.onRequestPut || null,
       DELETE: module.onRequestDelete || null,
       PATCH: module.onRequestPatch || null,
-    };    
+    };
     const params = getParams(route!.route, path).params;
     const newRequest = await endpoint[request.method]!({
       params,
       request,
       redirect: redirectFunction,
-    });    
-    if (request.method === "GET") {
+    });
+    if (request.method === 'GET') {
       const text = await newRequest.text();
       const body = await processLayouts(text, route!, request);
       return htmlResponse(body);

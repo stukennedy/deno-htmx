@@ -1,28 +1,29 @@
-import { serve } from "http/server.ts";
-import { html, htmlResponse } from "lib/html.ts";
-import { getEndpoint } from "lib/utils.ts";
+import { serve } from 'http/server.ts';
+import { html, htmlResponse } from 'lib/html.ts';
+import { getEndpoint } from 'lib/utils.ts';
 
 const port = 8080;
 
 const sendFile = async (filepath: string) => {
   try {
-    const file = await Deno.open("." + filepath, { read: true });
+    const file = await Deno.open('.' + filepath, { read: true });
     const readableStream = file.readable;
     return new Response(readableStream);
   } catch {
-    return new Response("404 Not Found", { status: 404 });
+    return new Response('404 Not Found', { status: 404 });
   }
 };
 
 const handler = async (request: Request): Promise<Response> => {
   const url = new URL(request.url);
+  console.log({ url });
   const filepath = decodeURIComponent(url.pathname);
-  const contentType = request.headers.get("sec-fetch-dest");
+  const contentType = request.headers.get('sec-fetch-dest');
 
   if (
-    request.method === "GET" &&
-    contentType !== "document" &&
-    contentType !== "empty"
+    request.method === 'GET' &&
+    contentType !== 'document' &&
+    contentType !== 'empty'
   ) {
     return sendFile(filepath);
   }
